@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #Usage: init centos 6.
-#Created by spark8103 <spark8103@gmail.com> 2014-12-04
+#Created by spark <park8888@gmail.com> 2014-12-04
 #Last Modified:
 
 PWD=$(pwd)

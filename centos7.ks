@@ -364,4 +364,4 @@ rm -rf /root/install.log.syslog
 
 %end
 #Change log.
-#Created this kickstart file. ChuanShuang Zhang <chuanshuang.zhang@dalegames.com>, 2015-01-13, Version: 0.1
+#Created this kickstart file. spark <spark@dlmes.com>, 2015-01-13, Version: 0.1
