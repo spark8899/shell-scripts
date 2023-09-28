@@ -1,5 +1,5 @@
 #!/bin/env python3
-# pip3 install PyMySQL pandans openpyxl
+# pip3 install PyMySQL pandas openpyxl
 
 import pymysql
 from sqlalchemy import create_engine
