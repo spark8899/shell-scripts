@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>pay total</title>
+</head>
+<body>
+  <h2>data info</h2>
+  <p><b>total_user: </b>{{ total.total_user }}, <b>total_amount: </b>{{ total.total_amount }}</p>
+  <p>
+  <table border="1" width='90%' cellspacing=0 cellpadding="0">
+    <tr>
+      <th>email</th>
+      <th>amount</th>
+      <th>datetime</th>
+    </tr>
+    {% for item in body %}
+    <tr align='center'>
+      <td>{{ item.email }}</td>
+      <td>{{ item.amount }}</td>
+      <td>{{ item.datetime }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  </p>
+  <p>
+    &nbsp;&nbsp;
+  </p>
+</body>
+</html>

@@ -1,4 +1,5 @@
 #!/bin/env python3
+# pip3 install PyMySQL prettytable
 
 import pymysql, sys
 import prettytable as pt
@@ -13,10 +14,10 @@ plan_query_user_info = "select id,email,mobile,status,create_time,update_time fr
 def query_user_info(id_list):
     query_plan = "%s (%s)" % (plan_query_user_info, id_list)
     #print(query_plan)
-    query_res = mysql_exec(query_plan)
+    query_res = mysql_query(query_plan)
     return query_res
 
-def mysql_exec(plan):
+def mysql_query(plan):
     db = pymysql.connect(host=host, user=user, password=password, database=database)
     cursor = db.cursor()
     cursor.execute(plan)

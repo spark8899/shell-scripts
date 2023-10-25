@@ -1,4 +1,5 @@
 #!/bin/env python3
+# pip3 install PyMySQL
 
 import pymysql, sys, os
 
@@ -6,8 +7,6 @@ host="127.0.0.1"
 user="user"
 password="abcd1234"
 database="admin_user"
-
-plan_setting_user_email = "update user set email='ss@mail.com',update_time='2022-03-03 03:03:04' where id in"
 
 def load_address_list(user_list_path):
     with open(user_list_path, 'r') as f:
