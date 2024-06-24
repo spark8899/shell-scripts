@@ -1,6 +1,7 @@
 #!/bin/python3
 # pip3 install PyMySQL jinja2
 import os, json, pymysql, jinja2, time
+from datetime import timezone, timedelta
 
 db_host="127.0.0.1"
 db_user="user001"
@@ -32,7 +33,7 @@ def main():
     pay_info = []
     total_amount = 0
     for i in res_user_pay:
-        res = {"email": i[0], "amount": int(i[1]), "datetime": i[2].strftime("%Y-%m-%d %H:%M:%S")}
+        res = {"email": i[0], "amount": int(i[1]), "datetime": i[2].astimezone(timezone(timedelta(hours=+8))).strftime("%Y-%m-%d %H:%M:%S")}
         total_amount += int(i[1])
         pay_info.append(res)
     total = {"total_amount": total_amount, "total_user": len(pay_info)}
