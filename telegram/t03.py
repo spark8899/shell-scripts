@@ -20,36 +20,36 @@ CHAT_ID = 'YOUR_CHAT_ID'
 TARGET_DATE = datetime(2024, 12, 31)
 
 # 记录当前和前一天的消息ID
-current_message_id = None
-previous_message_id = None
+pinned_message_id = None
 
 async def send_countdown_message():
+    global pinned_message_id
     """发送倒计时消息并置顶"""
     bot = Bot(TOKEN)
     try:
         now = datetime.now()
         countdown = TARGET_DATE - now
         days_left = countdown.days
-        text = f'剩余 {days_left} 天'
+        test = f"距离目标日期还有 {days_left} 天！"
 
         # 发送消息并获取消息ID
         message = await bot.send_message(chat_id=CHAT_ID, text=text, parse_mode=ParseMode.HTML)
-        
+
         # 置顶消息
         await bot.pin_chat_message(chat_id=CHAT_ID, message_id=message.message_id, disable_notification=True)
 
         # 删除前一天的置顶消息
-        if previous_message_id:
+        if pinned_message_id:
             try:
-                await bot.delete_message(chat_id=CHAT_ID, message_id=previous_message_id)
-                logger.info('Previous pinned message deleted successfully!')
+                await bot.delete_message(chat_id=CHAT_ID, message_id=pinned_message_id)
+                logger.info(f'Previous pinned message {pinned_message_id} deleted successfully!')
             except Exception as e:
-                logger.error(f'Error deleting previous message: {e}')
+                logger.error(f'Error deleting previous message {pinned_message_id}: {e}')
 
         # 更新前一天的消息ID为当前消息ID
-        previous_message_id = current_message_id
-        
-        logger.info('Countdown message sent and pinned successfully!')
+        pinned_message_id = message.message_id
+
+        logger.info(f'Countdown message {pinned_message_id} sent and pinned successfully!')
     except Exception as e:
         logger.error(f'Error: {e}')
 
@@ -66,4 +66,3 @@ def run_schedule():
 
 if __name__ == '__main__':
     run_schedule()
-
