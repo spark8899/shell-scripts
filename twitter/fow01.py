@@ -83,12 +83,13 @@ async def main():
         for x in i['media']['photos']:
             message = f"{message}[ ]({x['url']})"
         for x in i['media']['videos']:
-            message = f"{message}[ ]({x['url']})"
+            message = f"{message}[ ]({x['variants'][0]['url']})"
         message = f"{message}\n👉 Quote address: {i['url']}"
         print(message)
         await telegram_bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message, parse_mode=telegram.constants.ParseMode.MARKDOWN)
         print(i['id'])
-    set_value(filename, 'forwardID', results[0][0]['id'])
+    if old_id != results[0][0]['id']:
+        set_value(filename, 'forwardID', results[0][0]['id'])
     if now[11:15] == "00:0":
         alert_telegram_bot = telegram.Bot(token=ALERT_TELEGRAM_BOT_TOKEN)
         alert_message = f"forwardID: {results[0][0]['id']}"
