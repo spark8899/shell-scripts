@@ -1,7 +1,7 @@
 #
 # install python3.10
 # pip install twscrape python-telegram-bot pyyaml python-dotenv
-# */15 * * * * /root/twww/venv/bin/python3.10 /root/twww/fow01.py > /root/twww/1.log 2>&1
+# */15 * * * * /root/twToTel/venv/bin/python3.10 /root/twToTel/fow01.py > /root/twToTel/1.log 2>&1
 import os, sys, time, yaml, telegram, asyncio, twscrape
 from pathlib import Path
 from dotenv import load_dotenv
@@ -13,6 +13,7 @@ load_dotenv()
 # Telegram config
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
+TELEGRAM_CHANNEL_ID = os.getenv('TELEGRAM_CHANNEL_ID')
 ALERT_TELEGRAM_BOT_TOKEN = os.getenv('ALERT_TELEGRAM_BOT_TOKEN')
 ALERT_TELEGRAM_CHAT_ID = os.getenv('ALERT_TELEGRAM_CHAT_ID')
 
@@ -49,6 +50,7 @@ async def worker(api: twscrape.API, uid: str):
         tss = await twscrape.gather(api.user_tweets(uid, limit=10))
         for i in tss:
             tw = {"id": i.id_str, "datetime": i.date.strftime('%Y-%m-%d %H:%M:%S'),
+                "conversationId": i.conversationIdStr, "inReplyToTweetId": i.inReplyToTweetIdStr,
                 "url": i.url, "rawContent": i.rawContent, "media": i.media.dict()}
             tweets.append(tw)
         tweets.sort(key=lambda x: x['datetime'], reverse=True)
@@ -73,11 +75,25 @@ async def main():
         if i['id'] == old_id:
             break
         else:
-            tweets.append(i)
+            if i['conversationId'] == i['id']:
+                tweets.append(i)
+    tweets.reverse()
     for i in tweets:
         rawContent = i['rawContent']
         if rawContent.split('\n')[-1].find('#') != -1:
             rawContent = '\n'.join(rawContent.split('\n')[:-1])
+        elif rawContent.split('\n')[-2].find('#') != -1:
+            last_line = rawContent.split('\n')[-1]
+            mt = rawContent.split('\n')[:-2]
+            mt.append(last_line)
+            rawContent = '\n'.join(mt)
+        elif rawContent.split('\n')[-3].find('#') != -1:
+            last_line = rawContent.split('\n')[-1]
+            last_two_line = rawContent.split('\n')[-2]
+            mt = rawContent.split('\n')[:-3]
+            mt.append(last_two_line)
+            mt.append(last_line)
+            rawContent = '\n'.join(mt)
         message = f"{rawContent}\n"
         message = message.replace("#", "").replace("_", " ")
         for x in i['media']['photos']:
@@ -87,6 +103,7 @@ async def main():
         message = f"{message}\n👉 Quote address: {i['url']}"
         print(message)
         await telegram_bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message, parse_mode=telegram.constants.ParseMode.MARKDOWN)
+        await telegram_bot.send_message(chat_id=TELEGRAM_CHANNEL_ID, text=message, parse_mode=telegram.constants.ParseMode.MARKDOWN)
         print(i['id'])
     if old_id != results[0][0]['id']:
         set_value(filename, 'forwardID', results[0][0]['id'])

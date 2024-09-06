@@ -1,0 +1,18 @@
+# mysql
+mysql -u your_username -p your_database_name < init_db.sql
+
+# python3 install
+pip3 install python-telegram-bot, python-dotenv, mysql-connector-python schedule
+
+
+# .env file
+BOT_TOKEN=your_bot_token
+CHAT_ID=your_chat_id
+GROUP_INVITE_LINK=your_group_invite_link
+MYSQL_HOST=your_mysql_host
+MYSQL_USER=your_mysql_user
+MYSQL_PASSWORD=your_mysql_password
+MYSQL_DATABASE=your_mysql_database
+LEADERBOARD_TIME=23:59
+LOG_LEVEL=INFO
+LOG_FILE=bot.log
