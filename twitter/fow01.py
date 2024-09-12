@@ -82,12 +82,12 @@ async def main():
         rawContent = i['rawContent']
         if rawContent.split('\n')[-1].find('#') != -1:
             rawContent = '\n'.join(rawContent.split('\n')[:-1])
-        elif rawContent.split('\n')[-2].find('#') != -1:
+        elif len(rawContent.split('\n')) > 1 and rawContent.split('\n')[-2].find('#') != -1:
             last_line = rawContent.split('\n')[-1]
             mt = rawContent.split('\n')[:-2]
             mt.append(last_line)
             rawContent = '\n'.join(mt)
-        elif rawContent.split('\n')[-3].find('#') != -1:
+        elif  len(rawContent.split('\n')) > 2 and rawContent.split('\n')[-3].find('#') != -1:
             last_line = rawContent.split('\n')[-1]
             last_two_line = rawContent.split('\n')[-2]
             mt = rawContent.split('\n')[:-3]
