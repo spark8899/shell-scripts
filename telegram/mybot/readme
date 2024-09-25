@@ -1,0 +1,33 @@
+# install
+```
+python3 -m venv venv
+source venv/bin/activate
+pip3 install python-telegram-bot requests openai python-dotenv cachetools mysql-connector-python
+python3 main.py
+```
+
+# Directory Structure
+```
+mybot/
+│
+└── .env
+├── chatgpt.py
+├── config.py
+├── crypto.py
+├── guess.py
+├── logging_config.py
+├── main.py
+├── readme
+├── tools.py
+```
+
+# .env file
+```
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+ALLOWED_GROUP_IDS='[-0000000001, -1111111111]'
+OPENAI_API_KEY=your_openai_api_key
+MYSQL_HOST=your_mysql_host
+MYSQL_USER=your_mysql_user
+MYSQL_PASSWORD=your_mysql_password
+MYSQL_DATABASE=your_mysql_database
+```
