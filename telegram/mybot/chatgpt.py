@@ -9,7 +9,7 @@ client = OpenAI(base_url="https://api.openai.com/v1", api_key=OPENAI_API_KEY)
 logger = get_logger(__name__)
 
 def get_chatgpt_response(user_message):
-    logger.info(f"User requested ChatGPT response: {user_message}")
+    # logger.info(f"User requested ChatGPT response: {user_message}")
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",

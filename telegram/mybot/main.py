@@ -15,7 +15,7 @@ setup_logging()
 logger = get_logger(__name__)
 
 async def help(update, context):
-    logger.info(f"ALLOWED_GROUP_IDS: {ALLOWED_GROUP_IDS}, ChatID: {update.effective_chat.id}")
+    logger.info(f"ALLOWED_GROUP_IDS: `{ALLOWED_GROUP_IDS}`, ChatID: `{update.effective_chat.id}`")
     if not is_allowed_chat(update.effective_chat.id):
         await context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I only work in special groups.")
         return
@@ -24,11 +24,12 @@ async def help(update, context):
 
 async def price(update, context):
     chat_id, user_id = update.effective_chat.id, update.effective_user.id
+    user_name = update.message.from_user.username or update.message.from_user.user.first_name or "UnknownUser"
     user_message = update.message.text
 
     if not is_allowed_chat(chat_id):
         return
-    logger.info(f"Recive Message: {user_message}")
+    logger.info(f"Recive_price_Message: `{user_message}`, from_id: `{user_id}`, from_user: `{user_name}`")
 
     if len(context.args) == 0:
         await update.message.reply_text("Please provide a currency, e.g., /price btc")
@@ -43,7 +44,7 @@ async def guess(update, context):
     chat_id, user_id = update.effective_chat.id, update.effective_user.id
     user_name = update.message.from_user.username or update.message.from_user.user.first_name or "UnknownUser"
     user_message = update.message.text
-    logger.info(f"Recive Message: {user_message}")
+    logger.info(f"Recive_guess_Message: `{user_message}`, from_id: `{user_id}`, from_user: `{user_name}`")
 
     if not is_allowed_chat(chat_id):
         return
@@ -62,16 +63,17 @@ async def guess(update, context):
 
 async def chat(update, context):
     chat_id, user_id = update.effective_chat.id, update.effective_user.id
+    user_name = update.message.from_user.username or update.message.from_user.user.first_name or "UnknownUser"
     user_message = update.message.text
     bot_username = context.bot.username
-    logger.info(f"Recive Message: {user_message}")
+    logger.info(f"Recive_chat_Message: `{user_message}`, from_id: `{user_id}`, from_user: `{user_name}`")
 
     if not is_allowed_chat(chat_id):
         return
 
     reply = query_crypt_price(user_message.lower().strip())
     if len(reply) > 0:
-        logger.info(f"replay crypt price")
+        logger.info(f"replay_crypt_price: `{user_message.lower().strip()}`")
         await update.message.reply_text(reply, parse_mode=constants.ParseMode.MARKDOWN)
 
     # Check if you have been @mentioned or replied to in the group
@@ -81,31 +83,31 @@ async def chat(update, context):
             return
 
     if not rate_limit(user_id):
-        logger.warning(f"Rate limit exceeded for user ID: {user_id}")
+        logger.warning(f"Rate limit exceeded for user ID: `{user_id}`, Name: `{user_name}`")
         await update.message.reply_text("The request was too frequent. Please try again later.")
         return
 
     if user_message.startswith(f'@{bot_username}'):
         user_message = user_message[len(f'@{bot_username}'):].strip()
 
-    logger.info(f"Processed message: {user_message}")
+    logger.info(f"Processed_ai_message: `{user_message}`")
 
     # Check if it is a customization issue
     if user_message in CUSTOM_QA:
         response = CUSTOM_QA[user_message]
-        logger.info(f"HIT Custom response ")
+        logger.info(f"HIT Custom_QA response for chat")
     else:
         # Check the cache
         cached_response = get_cached_response(user_message)
         if cached_response:
             response = cached_response
-            logger.info("Response retrieved from cache")
+            logger.info(f"HIT Cache response for chat")
         else:
             response = get_chatgpt_response(user_message)
             cache_response(user_message, response)
             logger.info("New response generated and cached")
 
-    logger.info(f"Response: {response}")
+    logger.info(f"Response_ai: `{response}`")
     await update.message.reply_text(response)
 
 async def error_handler(update, context):

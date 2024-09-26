@@ -76,5 +76,5 @@ def post_guess(user_id, user_name, guess_content):
         connection.close()
 
     # return success.
-    logger.info(f"{user_name} comit guess: f{guess_content}")
+    logger.info(f"`{user_name}`(`user_id`) comit guess: `{guess_content}`")
     return "You have submitted, thank you for participating"

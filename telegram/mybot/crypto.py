@@ -66,7 +66,7 @@ def get_crypto_data(coin_id, symbol: str):
         if not data:
             return None
 
-        logger.info(f"COINGECKO_DATA, price_change_24h: {data['market_data']['price_change_percentage_24h']}, current_price: {data['market_data']['current_price']['usd']}, high_24h: {data['market_data']['high_24h']['usd']}, low_24h: {data['market_data']['low_24h']['usd']}")
+        # logger.info(f"COINGECKO_DATA, price_change_24h: {data['market_data']['price_change_percentage_24h']}, current_price: {data['market_data']['current_price']['usd']}, high_24h: {data['market_data']['high_24h']['usd']}, low_24h: {data['market_data']['low_24h']['usd']}")
         price_change_24h = data['market_data']['price_change_percentage_24h']
         price_change_24h = f"+{price_change_24h:.2f}" if price_change_24h > 0 else f"{price_change_24h:.2f}"
         current_price = data['market_data']['current_price']['usd']
@@ -95,7 +95,6 @@ def get_crypto_data(coin_id, symbol: str):
 def query_crypt_price(code):
     # Find cryptocurrency symbols in messages
     coins_list = coins_cache['coins_list']
-    logger.info(f"code: {code}")
     coin_id, symbol = None, None
     if code in coins_list:
         coin_id, symbol = code, coins_list[code]
@@ -117,7 +116,7 @@ def query_crypt_price(code):
                 f"{change_text}24h Change: {crypto_data['price_change_24h']}%\n"
                 f"⬆️24h High: {crypto_data['high_24h']} USDT\n"
                 f"⬇️24h Low:  {crypto_data['low_24h']} USDT\n\n"
-                f"Start trading on [top](https://topp.com)🚀"
+                f"Start trading on [Topp](https://Topp.io)🚀"
             )
             return message
     else:
