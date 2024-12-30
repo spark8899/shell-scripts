@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import requests, sys
+# curl -XPOST -H "Content-Type: application/json;charset=utf-8" 'https://open.larksuite.com/open-apis/bot/v2/hook/xxx' -d '{"msg_type": "text", "content": {"text": "test send."}}'
 
 LARK_BOT_URL="LARK_WEB_HOOK"
 
