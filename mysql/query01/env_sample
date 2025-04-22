@@ -1,0 +1,12 @@
+# Database configuration
+DB_HOST=mysql-xxx.xxx.xx
+DB_PORT=3306
+DB_USER=xxx
+DB_PASSWORD=xxxxxxxxx
+DB_NAME=xxxx
+
+# Application configuration
+APP_SECRET_KEY=xxxxxxxxxxxx
+APP_USERNAME=user
+APP_PASSWORD=xxxxxxxxxxxxxxxxx
+#LOG_LEVEL=INFO

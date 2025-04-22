@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>数据查询平台</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>数据查询平台</h1>
+            <div class="user-info">
+                欢迎, {{ username }}! <a href="/logout">退出</a>
+            </div>
+        </div>
+
+        <form method="post" action="/query" class="query-form">
+            <div class="form-row">
+                <label for="show_ids">输入show_id:</label>
+                <div class="form-control">
+                    <textarea id="show_ids" name="show_ids" required placeholder="每行输入一个show_id&#10;或一行内用逗号分隔多个show_id&#10;">{{ show_ids or '' }}</textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn">查询</button>
+        </form>
+
+        {% if error %}
+            <div class="error-message">{{ error }}</div>
+        {% endif %}
+
+        {% if results %}
+            <div class="results-container">
+                <h2 class="results-title">查询结果（共 {{ results|length }} 条）</h2>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>show_id</th>
+                            <th>photo_id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results %}
+                        <tr>
+                            <td>{{ row[0] }}</td>
+                            <td>{{ row[1] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
