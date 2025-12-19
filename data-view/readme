@@ -1,0 +1,19 @@
+.
+├── .env                  # Environment variables
+├── sql/
+│   └── init.sql          # Database initialization SQL
+├── app/
+│   ├── __init__.py
+│   ├── main.py           # FastAPI application entrypoint
+│   ├── config.py         # Configuration loading
+│   ├── database.py       # Database connection and initialization
+│   ├── models.py         # Pydantic models
+│   ├── auth.py           # Authentication logic (JWT, hashing)
+│   ├── utils.py          # Utility functions (logging setup)
+│   └── routers/
+│       ├── __init__.py
+│       ├── auth.py       # Authentication routes
+│       └── zookeeper.py  # Zookeeper query routes
+└── requirements.txt      # Python dependencies
+
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
