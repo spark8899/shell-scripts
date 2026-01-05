@@ -12,23 +12,26 @@ RPC_URL="https://bsc-dataseed.binance.org/"
 BALANCE_OF_SIG="0x70a08231"
 
 ADDRESS_LIST=(
-  "0xd8cc6BFDEe087148c220E9141a075D18418aBBaC"
-  "0x3A1008024ff1653d78170C18aFBEf8bF92eEfA2f"
+  "0xd8cc6BFDEe087148c220E9141a075D18418aBBaC bnb"
+  "0x3A1008024ff1653d78170C18aFBEf8bF92eEfA2f usdt"
 )
 
-TOKEN_LIST=(bnb usdt usdc)
 
-declare -A TOKEN_ADDR=(
-  [bnb]="native"
-  [usdt]="0x55d398326f99059ff775485246999027b3197955"
-  [usdc]="0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d"
-)
+get_token_addr() {
+  case "$1" in
+    bnb)  echo "native" ;;
+    usdt) echo "0x55d398326f99059ff775485246999027b3197955" ;;
+    usdc) echo "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d" ;;
+    *)    return 1 ;;
+  esac
+}
 
-declare -A TOKEN_DECIMALS=(
-  [bnb]=18
-  [usdt]=18
-  [usdc]=18
-)
+get_token_decimals() {
+  case "$1" in
+    bnb|usdt|usdc) echo "18" ;;
+    *)             echo "18" ;;
+  esac
+}
 
 ###############################################################################
 # 2. Helper Functions (infra / low-level)
@@ -93,25 +96,33 @@ emit_metric() {
 
 process_address() {
   local addr="$1"
+  local token="$2"
   local addr_hex
   addr_hex="$(addr_to_hex "$addr")"
 
-  for token in "${TOKEN_LIST[@]}"; do
-    local hex=""
-    local balance="0"
+  local hex=""
+  local balance="0"
 
-    if [[ "${TOKEN_ADDR[$token]}" == "native" ]]; then
-      hex="$(get_native_balance_hex "$addr")"
-    else
-      hex="$(get_erc20_balance_hex "$addr_hex" "${TOKEN_ADDR[$token]}")"
-    fi
+  local token_addr
+  if ! token_addr="$(get_token_addr "$token")"; then
+    echo "Error: Unknown token '$token' for address '$addr'" >&2
+    return
+  fi
 
-    if [[ -n "$hex" ]]; then
-      balance="$(hex_to_decimal "$hex" "${TOKEN_DECIMALS[$token]}")"
-    fi
+  local token_decimals
+  token_decimals="$(get_token_decimals "$token")"
 
-    emit_metric "$addr" "$token" "$balance"
-  done
+  if [[ "$token_addr" == "native" ]]; then
+    hex="$(get_native_balance_hex "$addr")"
+  else
+    hex="$(get_erc20_balance_hex "$addr_hex" "$token_addr")"
+  fi
+
+  if [[ -n "$hex" ]]; then
+    balance="$(hex_to_decimal "$hex" "$token_decimals")"
+  fi
+
+  emit_metric "$addr" "$token" "$balance"
 }
 
 ###############################################################################
@@ -119,8 +130,15 @@ process_address() {
 ###############################################################################
 
 main() {
-  for addr in "${ADDRESS_LIST[@]}"; do
-    process_address "$addr"
+  for entry in "${ADDRESS_LIST[@]}"; do
+    local addr
+    local token
+    IFS=' ' read -r addr token <<< "$entry"
+    if [[ -n "$addr" && -n "$token" ]]; then
+      process_address "$addr" "$token"
+    else
+      echo "Warning: Invalid entry '$entry'. Format should be 'ADDRESS TOKEN'" >&2
+    fi
   done
 }
 
