@@ -1,4 +1,0 @@
-# Configuration file for the nginx service.
-
-NGINX=/usr/local/PREFIX/sbin/nginx
-CONFFILE=/usr/local/PREFIX/conf/nginx.conf
