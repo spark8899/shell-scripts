@@ -1,0 +1,101 @@
+# install
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+mkdir logs && mv env_template .env
+
+# Directory Structure
+
+```
+/opt/tg-pusher/
+├── config.py
+├── content.py
+├── controller.py
+├── .env
+├── logger.py
+├── logs/
+│   ├── controller.log
+│   └── error.log
+├── readme
+├── requirements.txt
+├── state.db
+├── storage.py
+└── venv/
+├── worker.py
+```
+
+# create user
+
+```
+sudo useradd -r -s /bin/false tg-bot
+sudo chown -R tg-bot:tg-bot /opt/tg-pusher
+```
+
+# create systemd service
+
+vi /etc/systemd/system/tg-pusher.service
+
+```
+[Unit]
+Description=Telegram Group Push Service
+After=network.target
+
+[Service]
+Type=simple
+User=tg-bot
+Group=tg-bot
+
+WorkingDirectory=/opt/tg-pusher
+ExecStart=/opt/tg-pusher/venv/bin/python controller.py
+
+Restart=always
+RestartSec=10
+
+# Environment variables
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/opt/tg-pusher/.env
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+```
+
+start programe
+
+```
+# Reload systemd configs
+sudo systemctl daemon-reload
+
+# Enable autostart on boot
+sudo systemctl enable tg-pusher
+
+# Start service
+sudo systemctl start tg-pusher
+
+# Check status
+sudo systemctl status tg-pusher
+
+# View logs
+journalctl -u tg-pusher -f
+```
+
+# test
+
+```
+## get bot info
+curl -s https://api.telegram.org/bot<api>/getUpdates | jq .
+
+## send msg
+curl -X POST "https://api.telegram.org/bot<api>/sendMessage" -d "chat_id=xxx&text=hello"
+```
+
+# Method to get chatId
+
+```
+Add the bot `getidsbot` to the group
+The group automatically receives a message, and the id field in the message contains the group ID.
+Delete the bot `getidsbot`
+```

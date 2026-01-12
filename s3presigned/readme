@@ -1,0 +1,37 @@
+# install lib
+python3 -m venv venv
+source venv/bin/activate
+pip3 install fastapi uvicorn boto3 python-dotenv
+
+# create .env and replace
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+AWS_REGION=your_region
+AWS_S3_BUCKET=your_bucket_name
+AWS_S3_FOLDER=your_folder_path/
+
+# running
+/opt/s3presigned/venv/bin/uvicorn --host 0.0.0.0 --port 8811 --header "server:Gkqos" main:app
+
+# vim /etc/systemd/system/s3presigned.service
+[Unit]
+Description=s3presigned
+After=network.target
+
+[Service]
+ExecStart=/opt/s3presigned/venv/bin/uvicorn --host 0.0.0.0 --port 8811 --header "server:Gkqos" main:app
+WorkingDirectory=/opt/s3presigned
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=s3presigned
+StandardOutput=file:/opt/s3presigned/info.log
+StandardError=file:/opt/s3presigned/info.log
+
+[Install]
+WantedBy=multi-user.target
+
+# start service
+useradd --no-create-home --shell /bin/false s3presigned
+systemctl enable s3presigned
+systemctl start s3presigned
