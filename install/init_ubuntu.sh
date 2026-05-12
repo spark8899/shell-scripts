@@ -23,7 +23,7 @@ EOF
 
 echo ">> 3. Updating System & Installing Tools..."
 apt update && apt upgrade -y
-apt install -y net-tools curl htop jq iotop lrzsz lsof tree telnet python3.12-venv
+apt install -y net-tools curl htop jq iotop lrzsz lsof tree telnet python3-venv
 
 echo ">> 4. Configuring Environment..."
 cat >> /etc/profile <<EOF

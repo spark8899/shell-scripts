@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # pip3 install python3-whois
-# 11 11 * * * if /etc/node_exporter/scripts/check.domain.expire.py > /etc/node_exporter/domain_expire.prom.$$; then mv /etc/node_exporter/domain_expire.prom.$$ /etc/node_exporter/domain_expire.prom; else rm /etc/node_exporter/domain_expire.prom.$$;fi
+# 11 11 * * * if /etc/node_exporter/scripts/check_domain.py > /etc/node_exporter/domain.prom.$$; then mv /etc/node_exporter/domain.prom.$$ /etc/node_exporter/domain.prom; else rm /etc/node_exporter/domain.prom.$$;fi
 
 import whois, time, sys
 from datetime import datetime
 
-domain_list = ["google.com", "aws.com"]
+domain_list = ["abcd.com", "abcd.org"]
 
 def get_domain_expire(domain):
     try:

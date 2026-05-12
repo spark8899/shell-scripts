@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # pip3 install requests
-# */10 * * * * if /etc/node_exporter/scripts/check.website.py > /etc/node_exporter/website_up.prom.$$; then mv /etc/node_exporter/website_up.prom.$$ /etc/node_exporter/website_up.prom; else rm /etc/node_exporter/website_up.prom.$$;fi
+# */10 * * * * if /etc/node_exporter/scripts/check_website.py > /etc/node_exporter/website.prom.$$; then mv /etc/node_exporter/website.prom.$$ /etc/node_exporter/website.prom; else rm /etc/node_exporter/website.prom.$$;fi
 
 import requests, sys
 
@@ -18,8 +18,7 @@ def check_website(url):
 
 def main():
     websites = [
-        "www-google-com:https://www.google.com",
-        "www-aws-com:https://www.aws.com"
+        "name:website_addr"
     ]
     for website in websites:
         name, url = website.split(":", 1)

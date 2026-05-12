@@ -1,6 +1,6 @@
 #!/bin/bash
 #Crontab
-# */30 * * * * if /etc/node_exporter/scripts/check.machine.info.sh > /etc/node_exporter/matchine_info.prom.$$; then mv /etc/node_exporter/matchine_info.prom.$$ /etc/node_exporter/matchine_info.prom; else rm /etc/node_exporter/matchine_info.prom.$$;fi
+# */30 * * * * if /etc/node_exporter/scripts/check_machine.sh > /etc/node_exporter/matchine.prom.$$; then mv /etc/node_exporter/matchine.prom.$$ /etc/node_exporter/matchine.prom; else rm /etc/node_exporter/matchine.prom.$$;fi
 
 board_vendor=$(cat /sys/class/dmi/id/board_vendor 2>/dev/null | tr ' ' '_')
 board_name=$(cat /sys/class/dmi/id/board_name 2>/dev/null | tr ' ' '_')

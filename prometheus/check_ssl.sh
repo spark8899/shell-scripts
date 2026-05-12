@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #Crontab
-# */30 * * * * if /etc/node_exporter/scripts/check.ssl.expired.sh > /etc/node_exporter/ssl_expired.prom.$$; then mv /etc/node_exporter/ssl_expired.prom.$$ /etc/node_exporter/ssl_expired.prom; else rm /etc/node_exporter/ssl_expired.prom.$$;fi
+# */30 * * * * if /etc/node_exporter/scripts/check_ssl.sh > /etc/node_exporter/ssl.prom.$$; then mv /etc/node_exporter/ssl.prom.$$ /etc/node_exporter/ssl.prom; else rm /etc/node_exporter/ssl.prom.$$;fi
 
-check_list="www.google.com:www.google.com google.io:google.io"
+check_list="domain01:serverAddr domain02:serverAddr domain03:serverAddr"
 
 for i in $check_list
 do
