@@ -13,6 +13,7 @@ sed -i "s/127.0.0.1.*localhost/127.0.0.1 localhost $NEW_HOSTNAME/g" /etc/hosts
 echo ">> 2. Disabling APT Auto-Updates..."
 # Disable the service timers immediately to prevent lock contention
 systemctl disable --now apt-daily.timer apt-daily-upgrade.timer
+systemctl mask apt-daily.timer apt-daily-upgrade.timer
 # Update config to ensure it stays disabled
 cat > /etc/apt/apt.conf.d/20auto-upgrades <<EOF
 APT::Periodic::Update-Package-Lists "0";
