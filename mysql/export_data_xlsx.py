@@ -1,14 +1,27 @@
 #!/bin/env python3
 # pip3 install PyMySQL pandas openpyxl
+# .env # file
+"""
+DB_HOST=127.0.0.1
+DB_USER=root
+DB_PASS=root123
+DB_NAME=db01
+"""
 
-import pymysql
+import os, pymysql
+from pathlib import Path
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 import pandas as pd
 
-host="localhost"
-user="user"
-password="123456"
-database="admin_user"
+exec_directory = Path(__file__).resolve().parent
+os.chdir(exec_directory)
+load_dotenv()
+
+host=os.getenv("DB_HOST")
+user=os.getenv("DB_USER")
+password=os.getenv("DB_PASS")
+database=os.getenv("DB_NAME")
 
 plan_user = "select id,email,mobile,create_time,update_time from user where mobile > 0"
 
