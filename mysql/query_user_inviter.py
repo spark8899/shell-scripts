@@ -43,7 +43,7 @@ def check_user_exists(cursor, user_id):
 # ==================== 2. FORMAT 1: TREE STYLE ====================
 def print_as_tree(cursor, user_id):
     """Print hierarchy in tree format"""
-    print(f"User_{user_id}")
+    print(f"{user_id}")
     _print_tree_recursive(cursor, user_id, prefix="")
 
 def _print_tree_recursive(cursor, current_user_id, prefix=""):
@@ -121,12 +121,12 @@ if __name__ == "__main__":
 
             # Executing query based on format
             if output_format == "tree":
-                print(f"\n[Tree Format for User {target_user_id}]")
+                print(f"[Tree Format for User {target_user_id}]")
                 print("-" * 40)
                 print_as_tree(cursor, target_user_id)
                 print("-" * 40)
             elif output_format == "flat":
-                print(f"\n[Flat Format for User {target_user_id}]")
+                print(f"[Flat Format for User {target_user_id}]")
                 print("-" * 40)
                 print_as_flat(cursor, target_user_id)
                 print("-" * 40)
